@@ -1,37 +1,109 @@
-<h1>Marko</h1>
+<div class="marko-logo">
+    <img src="./logo.png" alt="">
+</div>
 
-<h2>Effortlessly documentation done right.</h2>
+<div class="marko-logo-text">
+    <img src="./marko-text.png" alt="">
+</div>
 
-<ul class="features">
-    <li>You don't need to run build process 👻</li>
-    <li>Simple yet powerful, benefit from Vue.js and our useful plugin API 💯</li>
-    <li>Easy for both beginners and pros 🙌</li>
-    <li>Very cute name 🤔</li>
+<div class="marko-intro">A friendly (and fast!) UI library that makes building web apps fun</div>
+
+<ul class="marko-features">
+    <li>
+        <span class="marko-simple marko-feature-common">Simple</span>
+        <span class="marko-feature-desc">If you know HTML, CSS, and Javascript, you know Marko</span>
+    </li>
+    <li>
+        <span class="marko-fast marko-feature-common">Fast</span>
+        <span class="marko-feature-desc">Faster loads via streaming and a tiny (~10kb gzip) runtime</span>
+    </li>
+    <li>
+        <span class="marko-progressive marko-feature-common">Progressive</span>
+        <span class="marko-feature-desc">From simple HTML templates to powerful UI components</span>
+    </li>
+    <li>
+        <span class="marko-trusted marko-feature-common">Trusted</span>
+        <span class="marko-feature-desc">Marko is powering high-traffic websites like ebay.com</span>
+    </li>
 </ul>
 
+
 <div class="landing-buttons">
-    <a class="landing-button" target="_blank" href="https://github.com/egoist/docute">
+    <a class="landing-button" target="_blank" href="https://github.com/marko-js/marko">
         GitHub
     </a>
     <a class="landing-button" router-link="/home">
-        Docs
+        中文文档
     </a>
 </div>
 
 <style>
-    h1 {
-        margin: 0;
-        margin-top: -50px;
-        font-weight: normal;
-        font-size: 40px;
-        letter-spacing: 1px;
+    body {
+        background-color: #f6f6f6;
     }
 
-    h2 {
-        margin-top: 20px;
-        color: #999;
+    .marko-logo img {
+        width: 300px;
+        margin-bottom: 10px;
+    }
+
+    .marko-logo-text img {
+        width: 300px;
+    }
+
+    .marko-intro {
+        color: #46484a;
+        text-align: center;
+        margin-top: 18px;
+        font-size: 20px;
         font-weight: normal;
         letter-spacing: 1px;
+        /*text-shadow: 1px 1px 1px #ddd;*/
+        /*text-shadow: 0 1px 3px rgba(0, 0, 0, .5);*/
+    }
+
+
+
+    .marko-features {
+        color: #666;
+        margin: 10px 0 30px 0;
+        font-size: 16px;
+        line-height: 1.7;
+    }
+
+    .marko-simple {
+        color: #09d;
+    }
+    .marko-fast{
+        color: #d04;
+    }
+    .marko-progressive{
+
+        color: #ffc400;
+    }
+    .marko-trusted{
+        color: #7d0;
+    }
+    .marko-feature-common{
+        font-weight: 400;
+        font-size: 25px;
+    }
+
+    .landing-button {
+        border: 1px solid #ccc;
+        border-radius: 33px;
+        padding: 10px 30px;
+        background-color: white;
+        display: inline-block;
+        margin-right: 20px;
+        color: #333;
+    }
+
+    .landing-button:hover {
+        box-shadow: inset 0 1px 3px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .1);
+        /*border-color: #42b983;*/
+        color: #42b983;
+        text-decoration: none;
     }
 
     .landing {
@@ -54,26 +126,27 @@
         user-select: none;
     }
 
-    .features {
-        margin-top: 20px;
-        margin-bottom: 60px;
-        font-size: 16px;
-        line-height: 1.7;
+    @media screen and (max-width: 848px) {
+        .marko-logo img,.marko-logo-text img {
+            width: 220px;
+        }
+        .marko-intro {
+            font-size: 20px;
+        }
+        .marko-features li {
+            font-size: 12px;
+        }
+        .landing ul {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+        .marko-feature-desc {
+            display: none;
+        }
+        .marko-feature-common{
+
+        }
     }
 
-    .landing-button {
-        border: 1px solid #ccc;
-        border-radius: 33px;
-        padding: 10px 30px;
-        background-color: white;
-        display: inline-block;
-        margin-right: 20px;
-        color: #333;
-    }
-
-    .landing-button:hover {
-        border-color: #42b983;
-        color: #42b983;
-        text-decoration: none;
-    }
 </style>

@@ -1,5 +1,5 @@
 const langs = [
-    {title: '简体中文', path: '/home', matchPath: /^\/zh-Hans/},
+    {title: '简体中文', path: '/home', matchPath: /^\/zh_cn/},
     {title: 'English', path: 'http://markojs.com/docs/getting-started/'},
 ]
 
@@ -84,6 +84,6 @@ docute.init({
             tags: ['english', 'zh-Hans', 'zh-Hant', 'ja'],
             url: 'https://docute.js.org'
         }),
-        evanyou()
+        // evanyou()
     ]
 })

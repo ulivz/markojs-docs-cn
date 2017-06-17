@@ -1,7 +1,6 @@
 # 语法
 
-Marko 采用了基于`HTML`的语法，所以你可能已经非常熟悉了。同时，Marko还扩展了`HTML`语言，添加了一些我们即将介绍的一些不错的特性。
-
+Marko 采用了基于`HTML`的语法，所以你可能已经非常熟悉了。同时，Marko还扩展了`HTML`语言，添加了我们即将讨论的一些不错的特性。
 
 > **ProTip:** Marko 同时也支持 [beautiful concise syntax](./concise.md). 如果您希望使用此语法查看我们的文档，只需单击任何Marko代码示例角落中的`switch syntax`按钮。
 

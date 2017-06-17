@@ -129,7 +129,7 @@ tag value = 5
 <div>Hello</div>
 ```
 
-### 动态属性
+### 属性
 
 您可以在一个开放的HTML标签中使用 `${}` 语法来将对象的属性合并为该HTML标签的属性：
 
@@ -143,30 +143,30 @@ _link.marko_
 <a ${input.attrs} target="_blank">eBay</a>
 ```
 
-would output the following HTML:
+将会得到下面的HTML：
 
 _output.html_
 ```html
 <a class="active" href="https://ebay.com/" target="_blank">eBay</a>
 ```
 
-### Style attribute
+### style 属性
 
-You can pass a string as the value of `style` just as you would in HTML, but Marko also supports passing an object as the value of the `style` attribute:
+您可以像HTML一样传递一个字符串作为`style`的值，但是Marko还支持传递一个对象作为`style`属性的值：
 
 ```marko
 <div style={ color:'red', fontWeight:'bold' }/>
 ```
 
-Output:
+输出:
 
 ```html
 <div style="color:red;font-weight:bold;"></div>
 ```
 
-### Class attribute
+### class 属性
 
-The `class` attribute also support object expressions or an array expressions (in addition to a string value) as shown below:
+`class`属性也支持对象表达式或数组表达式（除了支持字符串值外），如下所示：
 
 ```marko
 <!-- array: -->
@@ -176,16 +176,16 @@ The `class` attribute also support object expressions or an array expressions (i
 <div class={ a:true, b:false, c:true }/>
 ```
 
-In both cases, the output will be the same:
+在这两种情况下，输出将会相同：
 
 _output.html_
 ```html
 <div class="a c"></div>
 ```
 
-## Shorthand attributes
+## 简写属性
 
-Marko provides a shorthand for declaring classes and ids on an element:
+Marko提供了在元素上声明`class`和`id`简写（熟悉的emmet）：
 
 _source.marko_
 ```marko
@@ -194,7 +194,7 @@ _source.marko_
 <button#submit.primary.large/>
 ```
 
-Yields this HTML:
+将会产生这样的HTML:
 
 _output.html_
 ```html
@@ -203,9 +203,9 @@ _output.html_
 <button id="submit" class="primary large"></button>
 ```
 
-## Directives
+## 指令
 
-Directives are denoted by parenthesis and take an argument instead of a value.  Many directives may be used as both tags and attributes.
+指令采用圆括号表示，并采用参数而不是值。许多指令可以同时用作标签和属性：
 
 ```marko
 <if(true)>
@@ -213,7 +213,7 @@ Directives are denoted by parenthesis and take an argument instead of a value.  
 </if>
 ```
 
-Below is the same `if()` directive used as an attribute:
+下面是用作属性的相同的 `if()` 指令：
 
 ```marko
 <strong if(true)>
@@ -221,26 +221,27 @@ Below is the same `if()` directive used as an attribute:
 </strong>
 ```
 
-Most directives support JavaScript expressions, and some even support multiple arguments:
+大多数指令支持JavaScript表达式，有些甚至支持多个参数：
 
 ```marko
 <include(target, input)/>
 ```
 
-Others allow a custom syntax:
+有一些允许自定义语法：
+
 ```marko
 <for(item in items)/>
 ```
 
-Directives are used by many of our [Core Tags](./core-tags.md) for control-flow (`<if>`, `<else-if>`, `<for>`, etc.) and other features.  You can also use them in your own [Custom Tags](./custom-tags.md).
+marko 内置了很多用于控制(如 `<if>`、`<else-if>`、`<for>`等等)及其他场景的 [核心指令](./core-tags.md)，当然，你也可以 [自定义指令](./custom-tags.md) 并使用它们。
 
-## Inline JavaScript
+## 内联 JavaScript
 
-> **ProTip:** If you find yourself writing a lot of inline JS, consider moving it out to an external file and then [`import`](./core-tags.md#codeimportcode) it.
+> **ProTip:** 如果你发现自己写了很多内联的JS，可以考虑把它们移动到一个外部文件，然后[`import`](./core-tags.md#codeimportcode)进来。
 
-To execute JavaScript in your template you can insert a Javascript statement using the `$ <code>` syntax.
+想要在模板中执行JavaScript，可以使用`$ <code>`语法来插入一个Javascript语句。
 
-A line that starts with a `$` followed by a space will execute the code that follows.
+以`$`开始的一行，后面紧跟一个空格，marko将会执行紧随其后的Javascript代码：
 
 ```marko
 $ var name = input.name;
@@ -251,7 +252,7 @@ $ var name = input.name;
 </div>
 ```
 
-A statement may continue onto subsequent lines if new lines are bounded by `{}`, `[]`, `()`, ``` `` ```, or `/**/`:
+声明将会持续到后面的新行是否被 `{}`、`[]`、 `()`、 ``` `` ``` 或者 `/**/` 界定。
 
 ```marko
 $ var person = {
@@ -260,7 +261,7 @@ $ var person = {
 };
 ```
 
-Multiple statements or an unbounded statement may be used by wrapping the statement(s) in a block:
+可以通过将多个语句包装在块中来使用多个语句或无界语句：
 
 ```marko
 $ {
@@ -271,10 +272,11 @@ $ {
 }
 ```
 
-### Static JavaScript
-> **Static:** The JavaScript code that follows `static` will run once when the template is loaded and be shared by all calls to render. It must be declared at the top level and does not have access to values passed in at render.
+### 静态 JavaScript
 
-Inline JavaScript will run each time your template is rendered, if you only want to initialize some values once, use the `static` keyword:
+> **Static:** 模板加载后，并已经被render方法调用，跟随在`static`后面的JavaScript将只会执行一次。它必须在顶层声明，并且无法访问在render中传递的值。
+
+在每次渲染模板时，内联JavaScript都会运行，如果你只想初始化一些值，请使用`static`关键字：
 
 ```marko
 static var count = 0;
@@ -286,8 +288,7 @@ static function sum(a, b) {
 
 <div>${formatter.format(sum(2, 3))}</div>
 ```
-
-Like inline Javascript, multiple statements or an unbounded statement may be used by wrapping the statement(s) in a block:
+和内联JavaScript一样，静态的多行语句或无界语句也可以通过包装在一个块中来使用：
 
 ```marko
 static {
@@ -298,9 +299,9 @@ static {
 }
 ```
 
-### Escaping dollar signs
+### 转义 $ 符号
 
-If you need to output a `$` at the beginning of a line, you can escape it: `\$`.
+如果你需要在某一行开头输出一个`$`，你可以转义(escape)它: `\$`:
 
 ```marko
 <p>You can run JS in a Marko template like this:</p>

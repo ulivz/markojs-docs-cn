@@ -1,12 +1,12 @@
-# Core tags and attributes
+# 核心标签和属性
 
-Marko provides a number of tags
+Marko 内置了一些标签。
 
-## Control flow
+## 控制流
 
 ### `<if>`, `<else-if>`, `<else>`
 
-The `<if>`, `<else-if>`, and `<else>` tags provide conditional control-flow for templates.
+ `<if>`、`<else-if>`和`<else>` 标签为模板提供了条件控制流。
 
 ```marko
 <if(arriving)>
@@ -20,7 +20,7 @@ The `<if>`, `<else-if>`, and `<else>` tags provide conditional control-flow for 
 </else>
 ```
 
-Conditionals may also be applied as attributes:
+条件也可以作为属性来使用：
 
 ```marko
 <div if(arriving)>Hey there</div>
@@ -28,7 +28,7 @@ Conditionals may also be applied as attributes:
 <div else>What's up?</div>
 ```
 
-And support complex expressions:
+同时也支持复杂表达式：
 
 ```marko
 <if(Math.random() > 0.5)>
@@ -38,7 +38,8 @@ And support complex expressions:
 
 ### `<for>`
 
-The `<for>` tag allows iterating over an array of items:
+`<for>` 标签能用来迭代一个数组中的元素：
+
 ```marko
 <ul>
     <for(color in colors)>
@@ -47,20 +48,21 @@ The `<for>` tag allows iterating over an array of items:
 </ul>
 ```
 
-It may also be applied as an attribute:
+它也可以作为一个属性被使用：
+
 ```marko
 <ul>
     <li for(color in colors)>${color}</li>
 </ul>
 ```
 
-With either of the above templates, and the following value for `colors`:
+使用上述任意一种模板，以及下面`colors`值：
 
 ```js
 var colors = ['red', 'green', 'blue'];
 ```
 
-The output HTML would be the following:
+输出HTML都将如下所示：
 
 ```html
 <ul>
@@ -70,9 +72,9 @@ The output HTML would be the following:
 </ul>
 ```
 
-#### Loop Status Variable
+#### 循环状态变量（Loop Status Variable）
 
-The `for` directive also supports a loop status variable in case you need to know the current loop index. For example:
+`for`指令也支持循环状态变量，因为你可能需要知道当前的循环索引，例如：
 
 ```marko
 <ul>
@@ -85,27 +87,29 @@ The `for` directive also supports a loop status variable in case you need to kno
 </ul>
 ```
 
-##### Loop Status Methods
+##### 循环状态方法（Loop Status Methods）
 
 ###### `getLength()`
 
-Returns the length of the array
+返回数组的长度
 
 ###### `getIndex()`
 
-Returns the current loop index
+返回当前循环的索引
 
 ###### `isFirst()`
 
-Returns `true` if the current index is the first index, otherwise `false`
+如果当前索引是第一个索引，则返回“`true”`，否则返回`false`
 
 ###### `isLast()`
 
-Returns `true` if the current index is the last index, otherwise `false`
+如果当前索引是最后一个索引，则返回“`true”`，否则返回`false`
 
-#### Loop Separator
+#### 循环分隔符（Loop eparator）
 
-Used for separating values in a loop by characters. The first element will not
+循环分隔符被用于通过字符来分隔循环中的值。分隔符不会给第一个元素加上前缀，最后一个元素不会与`separator`相加：
+ 
+ Used for separating values in a loop by characters. The first element will not
 be prefixed and the last element will not be suffixed with the `separator`:
 
 ```marko

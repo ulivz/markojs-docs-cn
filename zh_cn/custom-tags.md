@@ -1,6 +1,6 @@
 # 自定义标签
 
-Marko 对你开放了编写 [核心标签](./core-tags.md) 的相同API，以便于你可以使用自定义标签和属性来扩展语言。
+Marko 对你开放了与编写 [核心标签](./core-tags.md) 相同的API，以便于你可以使用自定义标签和属性来扩展语言。
 
 > **ProTip:** 建议在编写自定义标签和自定义属性时至少有一个破折号，以表示它们不是标准HTML语法的一部分。
 
@@ -8,7 +8,7 @@ Marko 对你开放了编写 [核心标签](./core-tags.md) 的相同API，以便
 
 首先，让我们来看看基于模板的标签，它允许您使用命名的自定义标签来包含另一个模板，而不是指定文件系统路径并使用`<include>`。
 
-### 发现标签
+### 搜索标签
 
 在编译模板时，Marko将从模板的目录开始搜索，直到找到命名为`components/`的目录的项目根。然后尝试将这些目录的子项加载为自定义标签。这些子项可以是Marko模板，也可以是一个带有`index.marko`模板（以及其他支持文件）的目录。
 
@@ -32,27 +32,27 @@ pages/
 - `<app-footer>`
 - `<home-banner>`
 
-所以现在，不需要指定一个路径：
+所以现在，不再需要像这样指定一个路径：
 
 ```marko
 <include('../../components/app-header/index.marko')/>
 ```
 
-你可以直接使用标签名称：
+你可以直接使用标签名称了：
 
 ```marko
 <app-header/>
 ```
 
-## 使用npm的标签
+## 使用npm包中的标签
 
-想要使用`npm`中的自定义标签非常容易，只需要确保npm包已正确安装并列在项目的`package.json`的依赖项（dependencies）中：
+想要使用`npm`包中的自定义标签非常容易，只需要确保`npm`包已正确安装并列在项目的`package.json`的依赖项（dependencies）中：
 
 ```
 npm install --save some-third-party-package
 ```
 
-就是这样，Marko将在编译模板时发现这些标签，你可以在模板中轻松地使用它们：
+这样一来，Marko将在编译模板时找到这些标签，你可以在模板中尽情地使用它们：
 
 ```marko
 <div>
@@ -62,7 +62,7 @@ npm install --save some-third-party-package
 
 ## 具体细节
 
-给定一个模板文件，`marko`将会通过相对于模板文件的路径来进行搜索来自动发现所有标签库（taglibs）。 同时将自动导入与包中根级目录下的 `package.json` 文件中的`dependencies`相关联的所有标签库（taglibs）。
+当给定了一个模板文件，`marko`将会自动通过相对于模板文件的路径来进行搜索，以发现所有标签库`(taglibs)`，同时自动导入与包中根级目录下的 `package.json` 文件中的`dependencies/devDependencies`相关联的所有标签库`(taglibs)`。
 
 举个例子，若给定一个路径为`/my-project/src/pages/login/template.marko`的模板，同时给出了一个类似于以下内容的`/my-project/package.json`：
 
@@ -78,7 +78,7 @@ npm install --save some-third-party-package
 }
 ```
 
-搜索路径将如下所示：
+`marko`编译器的搜索路径将如下所示：
 
 1. `/my-project/src/pages/login/marko.json`
 2. `/my-project/src/pages/marko.json`
@@ -100,7 +100,7 @@ npm install --save some-third-party-package
      
 ```
 
-在此过程中任何渲染开始之前，都应首先进行声明。
+上述语句应该在任何渲染进程开始之前进行声明。
 
 
 ### marko.json 语法
@@ -150,7 +150,7 @@ Marko 还支持一种声明标签和属性的简化写法。下面的`marko.json
 }
 ```
 
-每个标签都应该和一个`renderer`或模板相关联。当模板中使用自定义标签时，那么将在渲染时调用`renderer`（或模板）以生成HTML/输出。如果`String`路径指向一个自定义标签的`marko-tag.json`，那么将加载该`marko-tag.json`来定义标签。
+每个标签都应该和一个`renderer`或模板相关联。当模板中使用自定义标签时，那么`marko`编译器将在渲染模板时调用`renderer`（或模板）以生成HTML/输出。如果`String`路径指向一个自定义标签的`marko-tag.json`，那么将加载该`marko-tag.json`来定义标签。
 
 ### 定义属性
 
@@ -160,9 +160,9 @@ _Multiple attributes:_
 
 ```javascript
 {
-    "@message": "string",     // String
-    "@my-data": "expression", // JavaScript expression
-    "@*": "string"            // Everything else will be added to a special "*" property
+    "@message": "string",     // 字符串
+    "@my-data": "expression", // JavaScript 表达式
+    "@*": "string"            // 其他的属性将被添加到一个特殊的 "*" 属性中
 }
 ```
 

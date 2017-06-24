@@ -61,8 +61,7 @@ docute.init({
             },
             {
                 title: '编辑器插件',
-                path: '/changelog',
-                source: 'https://raw.githubusercontent.com/egoist/docute/master/CHANGELOG.md'
+                path: '/zh_cn/editor-plugins',
             },
             {
                 title: '语言', type: 'dropdown', items: langs

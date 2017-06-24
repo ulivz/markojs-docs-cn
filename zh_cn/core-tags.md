@@ -107,10 +107,7 @@ var colors = ['red', 'green', 'blue'];
 
 #### 循环分隔符（Loop eparator）
 
-循环分隔符被用于通过字符来分隔循环中的值。分隔符不会给第一个元素加上前缀，最后一个元素不会与`separator`相加：
- 
- Used for separating values in a loop by characters. The first element will not
-be prefixed and the last element will not be suffixed with the `separator`:
+循环分隔符被用于通过字符来分隔循环中的值。分隔符不会给第一个元素加上前缀，同时也不会给最后一个元素加上后缀：
 
 ```marko
 <div>

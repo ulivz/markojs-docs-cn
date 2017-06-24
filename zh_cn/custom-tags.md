@@ -12,8 +12,6 @@ Marko 对你开放了编写 [核心标签](./core-tags.md) 的相同API，以便
 
 在编译模板时，Marko将从模板的目录开始搜索，直到找到命名为`components/`的目录的项目根。然后尝试将这些目录的子项加载为自定义标签。这些子项可以是Marko模板，也可以是一个带有`index.marko`模板（和其他支持文件）的目录。
 
-When compiling a template Marko will search starting at template's directory, up to the project root for directories named `components/`. It then attempts to load the children of these directories as custom tags.  The children can be a Marko template or a directory with an `index.marko` template (and other supporting files).
-
 ```目录结构
 components/
     app-header/

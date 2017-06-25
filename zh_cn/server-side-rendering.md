@@ -1,4 +1,4 @@
-# Server-side rendering
+# 服务端渲染
 
 Marko allows any Marko template/UI component to be rendered on the server or in the browser. A page can be rendered to a `Writable` stream such as an HTTP response stream as shown below:
 

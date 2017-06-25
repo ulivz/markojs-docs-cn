@@ -1,10 +1,10 @@
-# Components
+# 组件
 
-Marko makes it easy to to co-locate your component's class and styles with the HTML view that they correspond to.
+Marko可以轻松地将组件的`class`和`style`与它们对应的`HTML`进行定位。
 
-## Single-file components
+## 单文件组件
 
-Marko allows you to define a `class` for a component right in the `.marko` view and call methods of that class with `on-*` attributes:
+Marko允许你在`.marko`文件中为组件定义一个`class`，并使用`on *`属性调用该类的方法：
 
 ```marko
 class {
@@ -24,6 +24,8 @@ class {
 
 ### Styles
 
+向你的视图添加样式也非常容易，这些样式不会像内联样式一般输出在`<style>`标签中，但会导致样式被外部化，因此如果组件在页面上多次使用，则不会重复。
+
 Adding styles to your view is also made easy.  These styles won't be output in a `<style>` tag as inline styles usually are, but will result in the style being externalized so it isn't duplicated should a component be used more than once on the page.
 
 ```marko
@@ -37,7 +39,7 @@ style {
 <button.primary on-click('increment')>+1</button>
 ```
 
-If you use a css preprocessor, you can add the extension right on `style`:
+如果想使用css预处理器，你可以在`style`上添加扩展名：
 ```marko
 style.less {
     button.primary {
@@ -46,15 +48,16 @@ style.less {
 }
 ```
 
-## Multi-file components
+## 多文件组件
 
-You might prefer to keep your component's class and style definitions in separate files from the view definition - the classical separation of HTML, CSS and JavaScript.  Marko makes this possible with a simple filename based convention.
 
-> **ProTip:** If your motivation to move the component's class and styles out to a separate file is that the code is getting too large, consider splitting the component into smaller, more manageable components.
+你可能更喜欢将组件的class和style的定义与视图的定义（经典的HTML、CSS与JavaScript的分离）保持在单独的文件中，Marko通过简单的基于文件名的约定来实现这一点。
 
-### Supporting files
+> **ProTip:** 如果你将组件的类和样式移动到单独文件的动机是因为代码变得太大，请考虑将组件分成更小、更易于管理的组件。
 
-Marko automatically discovers supporting files in the same directory as a Marko view.  For example if you have a view named `counter.marko`, Marko will automatically look for `counter.component.js` and `counter.style.css`.
+### 支持的文件
+
+Marko会自动在与Marko视图相同的目录中发现所支持的文件。例如，如果有一个名为`counter.marko`的视图，Marko会在该目录下自动查找`counter.component.js`和`counter.style.css`。
 
 ```
 counter.marko
@@ -62,7 +65,7 @@ counter.component.js
 counter.style.css
 ```
 
-Marko also handles views named `index.marko` specially, it will look for `component.js` and `style.css` in addition to `index.component.js` and `index.style.css`.  This allows easily grouping component files into a directory:
+Marko还会专门处理名为`index.marko`的视图，除了`index.component.js`和`index.style.css`外，还会查找`component.js`和`style.css`。这样可以轻松地将组件文件分组到一个目录中：
 
 ```
 counter/
@@ -71,7 +74,7 @@ counter/
     style.css
 ```
 
-In your `component.js` file, export the component's class:
+在你的 `component.js` 文件中导出组件的`class`：
 
 ```js
 module.exports = class {
@@ -86,25 +89,27 @@ module.exports = class {
 }
 ```
 
-In your `index.marko` file, you can reference methods from the class using `on-*` attributes:
+在你的 `index.marko` 中，你可以使用`on *`属性来引用`class`中的方法
+
 ```marko
 <div>The current count is ${state.count}</div>
 <button on-click('increment')>+1</button>
 ```
 
-And in your `style.css`, define the style:
+在你的`style.css`中，定义样式如下：
 ```css
 button.primary {
     background-color:#09c;
 }
 ```
 
-> **ProTip:** In addition to looking for `[name].style.css`, Marko actually looks for `[name].style.*` so it will also pick up any css preprocessor you're using (less, stylus, scss, etc.).
+> **ProTip:** 除了查找`[name].style.css`之外，Marko实际上也会查找`[name].style。*`，所以它也会找到你正在使用的任何css预处理程序（less, stylus, scss等）
 
 
-### Components with plain objects
 
-If you're targeting a browser that does not support classes, a plain object may also be exported:
+### 具有普通对象的组件
+
+如果您使用的浏览器不支持类，则可以导出一个普通对象：
 
 ```js
 module.exports = {
@@ -119,20 +124,21 @@ module.exports = {
 }
 ```
 
-## Split components
+## split组件
 
-Split components allow you to optimize for the case where a component is rendered on the server, but doesn't need to be re-rendered in the browser.  Because the component doesn't need to be rendered in the browser, the template does not need to be sent to the browser.  This can reduce your page weight by a few hundred bytes in some cases.
+split组件允许你在组件在服务器上渲染、但不需要在浏览器中重新渲染的情况下进行优化。因为组件不需要在浏览器中渲染，所以模板不需要发送到浏览器。在某些情况下，这可以会减少你页面几百个字节的大小。
 
-> **Note:** If a split component is the child of a stateful component, the full rendering logic will still be sent down because the parent component may pass new input to the split component, requiring it to re-render.
+> **Note:** 如果分割组件是有状态组件的后代，则完整的渲染逻辑仍将被发送，因为父组件可能会将新的输入传递给拆分组件，从而要求重新渲染。
 
-Additionally if _all_ components rendered on a page are split components, Marko's VDOM and rendering runtime is not necessary and therefore not sent to the browser, which can further reduce page weight by a few kilobytes.
+另外，如果页面上呈现的 _所有_ 组件都是拆分组件，则Marko的`VDOM`和`rendering runtime`不是必需的，因此不会发送到浏览器，这可以进一步将页面的大小减少几千字节。
 
-> **ProTip:** Don't over-optimize.  If your component really doesn't need re-rendering, go ahead and split, but don't forgo stateful re-rendering when it would make your code more maintainable.
+> **ProTip:** 不要过度优化。如果你的组件真的不需要重新渲染，请继续进行拆分，但是不要放弃有状态组件的重新渲染，这将使你的代码更易于维护。
 
-### Usage
+### 用法
 
-Marko discovers split components in a similar way to how it discovers an external component class:
-for example if you have a view named `button.marko`, it will automatically look for `button.component-browser.js`.  If your view is named `index.marko`, it will look for `component-browser.js` in addition to `index.component-browser.js`.
+Marko以类似于发现外部组件类的方式发现split组件。
+
+举个例子，如果你有一个名为`button.marko`的视图，它将自动查找`button.component-browser.js`。如果你的视图被命名为`index.marko`，那么除了`index.component-browser.js`之外，它还会查找`component-browser.js`。
 
 ```
 counter/
@@ -140,8 +146,9 @@ counter/
     component-browser.js
 ```
 
-A split component might also need to do some set up as part of the initial render.  In this case, the component may define a second component class to use the `onCreate`, `onInput`, and `onRender` [lifecycle methods](#lifecycle).  This class can be exported from `component.js` or defined right in the template as with single-file components.
-### Example
+split组件也可能将一些初始化设置作为初始渲染的一部分。在这种情况下，该组件可能需要定义第二个组件类，以使用`onCreate`，`onInput`和`onRender`等[生命周期钩子](#lifecycle)。该类可以从`component.js`导出，也可以在模板中直接定义为单文件组件。
+
+### 示例
 
 _index.marko_
 ```marko
@@ -163,17 +170,17 @@ module.exports = {
 }
 ```
 
-## Attributes
+## 属性
 
 ### `on-[event](methodName, ...args)`
 
-The `on-*` attribute sets an event listener on the component. When triggered by user interactions or other components the method supplied is called on that component. Marko knows to check for changes and update the UI accordingly.
+`on-*` 属性用于在组件上设置一个事件侦听器。当用户交互或其他组件触发该事件时，将调用该组件提供的方法。Marko会检查变化并更新对应的UI。
 
-| params  | type | description |
+| 参数  | 类型 | 描述 |
 | ------- | ---- | ----------- |
-| `event` | `String` | the name of the event to listen to |
-| `methodName` | `String` | the name of a method on the component's class to call when the event is fired |
-| `...args` | `Any` | all subsequent parameters are prepended to the arguments that are passed to the component's method |
+| `event` | `String` | 要监听的事件的名称 |
+| `methodName` | `String` | 在触发事件时调用组件类的方法的名称 |
+| `...args` | `Any` | 所有后续参数都将附加到传递给组件方法的参数中 |
 
 ```marko
 class {
@@ -185,13 +192,13 @@ class {
 <button on-click('sayHello', 'Frank')>Say Hello to Frank</button>
 ```
 
-The component above would also receive the following arguments after `name`:
-+ `evt` for the DOM event
-+ `el` for the DOM element
+上面的组件也将在`name`之后收到以下参数：
++ `evt` 为DOM事件
++ `el` 为DOM元素
 
-Emitting an event to a parent it will receive `component` instead of `evt, el` for the child component that triggered it.
+将一个事件发送给父组件，它会接收到`component`，而不是用于触发它的子组件的`evt，el`。
 
-Lets compare how we might approach events using just the DOM, jQuery, and then Marko.
+让我们比较我们如何使用DOM，jQuery以及Marko来处理事件。
 
 JavaScript/DOM:
 
@@ -230,17 +237,23 @@ class {
 <input type="text" on-input('input') on-blur('blur')>
 ```
 
-The syntax for handling events is simple in Marko. In the case of accepting additional arguments it's much simpler.
+Marko中处理事件的语法很简单。在接受额外的参数的情况下，它要简单得多。
 
-Nothing happens with the events on the server. They're only applied after they mount in the browser.
+在服务器上不会触发任何事件。它们仅在嵌入到浏览器中之后才能应用。
 
-The basic use is to accept DOM events like `click`, `input`, `submit`.
-Alternatively a child component can "bubble" up information to a parent
-component using the event system. See [an example of parent-child communication](http://markojs.com/try-online?file=%2Flanguage-guide%2Fattributes%2Fevents.marko&gist=) with the "try online" live editor.
+基本的用途是接受像`click`, `input`, `submit`这样的DOM事件。
+
+或者，子组件可以将消息`冒泡`给父组件以使用事件系统。使用`在线实时编辑器`，查看[父子组件通信的一个示例](http://markojs.com/try-online?file=%2Flanguage-guide%2Fattributes%2Fevents.marko&gist=)
 
 ### `key`
 
-A key is a scoped `id`. The `key` attribute can be applied to both HTML elements and custom tags for UI components. If applied to an HTML element, a unique `id` attribute will be added to the HTML element. The assigned ID will be a concatenation of the parent component ID with the provided value of the `key` attribute. If applied to a UI component , then the `key` will be used to assign a unique ID to the target component and all of its children (including nested components and nested HTML elements). Keys allow the component to easily obtain references to nested HTML elements and nested UI components.  Additionally, when updating the DOM, keyed elements and components are guaranteed to be matched up and reused rather than being discarded and re-created.
+一个key是一个范围的`id`。 `key`属性可以应用于UI组件的HTML元素和自定义标签。
+
+如果应用在HTML元素上，则会将唯一的`id`属性添加到HTML元素上。分配的ID将会是父组件ID与`key`属性的提供值的连接。
+
+如果应用于UI组件，那么`key`将用于为目标组件及其所有子组件（包括嵌套组件和嵌套HTML元素）分配唯一的ID。
+
+key允许组件轻松获取对嵌套HTML元素和嵌套UI组件的引用。另外，当更新DOM时，被key标记的元素和组件被保证被匹配和重新使用，而不是被丢弃和重新创建。
 
 _input.marko_
 ```marko
@@ -249,7 +262,7 @@ _input.marko_
 </div>
 ```
 
-Will generate HTML similar to:
+将生成类似于下面的HTML：
 
 _output.html_
 ```html
@@ -258,12 +271,12 @@ _output.html_
 </div>
 ```
 
-The containing component can reference the nested DOM element using the following code:
+包含的组件可以使用以下代码引用嵌套的DOM元素：
 ```js
 var myButton = this.getEl('myButton');
 ```
 
-The `key` attribute can also be applied to repeated elements by appending `[]`:
+`key`属性也可以通过追加`[]`来应用于重复的元素：
 
 _input.marko_
 ```marko
@@ -274,7 +287,7 @@ _input.marko_
 </ul>
 ```
 
-Will generate HTML similar to:
+将会生成类似于下面的HTML:
 
 _output.html_
 ```html
@@ -285,14 +298,15 @@ _output.html_
 </ul>
 ```
 
-The containing component can reference the repeated DOM elements using the following code:
+包含组件可以使用以下代码引用重复的DOM元素：
+
 ```js
-var colorLIs = this.getEls('colors'); // Returns an Array of HTMLElement nodes
+var colorLIs = this.getEls('colors'); // 返回一个 HTMLElement nodes 的数组
 ```
 
 ### `for-key`
 
-The [HTML `<label>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/label) `for` attribute takes an `id` as its value.  `for-key` allows you to reference a labelable element via its `key`:
+ [HTML `<label>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/label) 标签 `for` 属性需要一个 `id`作为它的值，`for-key` 允许你通过它的`key`来引用一个可标注的元素：
 
 ```marko
 <label for-key="name">Name</label>
@@ -301,8 +315,7 @@ The [HTML `<label>`](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/l
 
 ### `no-update`
 
-Preserves the DOM subtree associated with the DOM element or component such that
-it won't be modified when re-rendering the UI component.
+保留与DOM元素或组件关联的DOM子树，重新渲染UI组件时不会被修改。
 
 ```marko
 <div>
@@ -322,8 +335,7 @@ it won't be modified when re-rendering the UI component.
 
 ### `no-update-if`
 
-Similar to [no-update](#codeno-updatecode) except that the DOM subtree is
-conditionally preserved:
+类似于[no-update](#codeno-updatecode)，除了DOM子树是有条件被保留：
 
 ```marko
 <div>
@@ -336,8 +348,7 @@ conditionally preserved:
 
 ### `no-update-body`
 
-Similar to [no-update](#codeno-updatecode) except that only the child DOM nodes
-are preserved:
+类似于 [no-update](#codeno-updatecode)，除了只有子DOM子节点被保留：
 
 ```marko
 <!-- Don't ever re-render any nested DOM elements -->
@@ -348,8 +359,7 @@ are preserved:
 
 ### `no-update-body-if`
 
-Similar to [no-update-body](#codeno-update-bodycode) except that only the child
-DOM nodes are conditionally preserved:
+类似于[no-update-body](#codeno-update-bodycode)， 除了只有子DOM子节点有条件地被保留：
 
 ```marko
 <div>
@@ -362,9 +372,7 @@ DOM nodes are conditionally preserved:
 
 ### `:no-update`
 
-Used to prevent select element attributes from being modified during a
-re-render. The attribute that should not be modified should have a `:no-update`
-suffix:
+用于防止在重新渲染期间修改指定元素的属性，不应修改的属性应该有一个`:no-update`作为后缀：
 
 ```marko
 <!-- Don't ever modify the class attribute -->
@@ -373,25 +381,25 @@ suffix:
 </div>
 ```
 
-## Properties
+## 属性
 
 ### `this.el`
 
-The root [HTML element](https://developer.mozilla.org/en-US/docs/Web/API/element) that the component is bound to.  If there are multiple roots, this is the first.
+组件绑定的根 [HTML element](https://developer.mozilla.org/en-US/docs/Web/API/element) 如果有多个根元素，将是第一个。
 
 ### `this.els`
 
-An array of the root [HTML elements](https://developer.mozilla.org/en-US/docs/Web/API/element) that the component is bound to.
+组件绑定的根 [HTML elements](https://developer.mozilla.org/en-US/docs/Web/API/element) 的数组。
 
 ### `this.id`
 
-The String ID of the root [HTML element](https://developer.mozilla.org/en-US/docs/Web/API/element) that the component is bound to.
+组件绑定的根  [HTML element](https://developer.mozilla.org/en-US/docs/Web/API/element) 的字符串ID。
 
 ### `this.state`
 
-The current state for the component.  Changing `this.state` or any of its direct properties will result in the component being re-rendered.
+组件的当前状态。更改`this.state`或其任何直接属性将导致重新渲染组件。
 
-Only properties that exist when `this.state` is first defined will be watched for changes.  If you don't need a property initially, you can set it to `null`.
+只有当`this.state`被首先定义时，才会监听属性的变化。如果你在初始化不需要属性，可以将其设置为`null`。
 
 ```marko
 class {
@@ -409,11 +417,11 @@ class {
 }
 ```
 
-Be aware, that setting a `state` property only nominates the component for a possible rerender and properties are only watched one level deep. Thus, the component is only rerendered, if at least one of the component state properties changed (`oldValue !== newValue`).
+请注意，设置`state`属性仅指定了组件一个可能的渲染器，并且属性仅仅会在一层的深度下监听。因此，只有至少一个组件状态的属性发生更改（`oldValue !== newValue`）时，则该组件才会被重新渲染。
 
-If none of the properties changed (because identical or not detected by a shallow comparison), the assignment is considered a no operation (great for performance).
+如果没有任何一个属性发生改变（因为新旧值相同或者通过浅比较没有检测到），那么这个赋值操作被认为是一个no操作（对于性能很好）。
 
-We recommend using [immutable](https://wecodetheweb.com/2016/02/12/immutable-javascript-using-es6-and-beyond/) data structures, but if you want to mutate a state property (perhaps push a new item into an array) you can mark it as dirty using `setStateDirty`.
+我们建议使用 [immutable](https://wecodetheweb.com/2016/02/12/immutable-javascript-using-es6-and-beyond/) 数据结构，但是如果需要更改状态属性（假设会新增新项目到数组中），可以使用`setStateDirty`将其标记为脏状态。
 
 ```js
 this.state.numbers.push(num);
@@ -425,15 +433,15 @@ this.setStateDirty('numbers');
 
 ### `this.input`
 
-The current input for the component.  Setting `this.input` will result in the component being re-rendered.
+组件的当前输入，设置`this.input`将导致组件被重新渲染。
 
-## Variables
+## 变量
 
-When a Marko component is compiled some additional variables are made available to the rendering function. These variables are described below.
+当编译一个Marko组件时，一些附加变量可用于渲染函数，这些变量如下所述。
 
 ### `component`
 
-The `component` variable refers to the instance of the current UI component being rendered. This variable can be used to call methods on the UI component instance.
+`component`变量代表正在渲染的当前UI组件的实例，该变量可用于调用UI组件实例上的方法。
 
 ```marko
 class {
@@ -448,7 +456,7 @@ class {
 
 ### `input`
 
-The `input` variable refers to the input object and is equivalent to `component.input`|`this.input`.
+`input`变量指的输入对象，等价于`component.input`|`this.input`。
 
 ```marko
 <div>Hello ${input.name}</div>
@@ -456,22 +464,22 @@ The `input` variable refers to the input object and is equivalent to `component.
 
 ### `state`
 
-The `state` variable refers to UI component's state object and is the unwatched equivalent of `component.state`|`this.state`.
+`state`变量指的是UI组件的状态对象，等价于未被监听的 `component.state` |`this.state`。
 
 ```marko
 <div>Hello ${state.name}</div>
 ```
 
-## Methods
+## 方法
 
 ### `destroy([options])`
 
-| option  | type | default | description |
+| 选项  | 类型 | 默认值 | 描述 |
 | ------- | ---- | ------- | ----------- |
-| `removeNode` | `Boolean` | `true` | `false` will keep the component in the DOM while still unsubscribing all events from it |
-| `recursive` | `Boolean` | `true` | `false` will prevent child components from being destroyed |
+| `removeNode` | `Boolean` | `true` | `false` 将组件保留在DOM中，同时取消订阅所有事件 |
+| `recursive` | `Boolean` | `true` | `false` 将防止子组件被销毁 |
 
-Destroys the component by unsubscribing from all listeners made using the `subscribeTo` method and then detaching the component's root element from the DOM. All nested components (discovered by querying the DOM) are also destroyed.
+通过使用`subscribeTo`方法取消订阅所有监听器，然后从DOM中分离组件的根元素来销毁该组件。 所有嵌套组件（通过查询DOM发现）也将会被销毁。
 
 ```javascript
 component.destroy({
@@ -482,91 +490,89 @@ component.destroy({
 
 ### `forceUpdate()`
 
-Queue the component to re-render and skip all checks to see if it actually needs it.
+重新渲染组件队列，并跳过所有检查，以检查是否真的需要它。
 
-> When using `forceUpdate()` the updating of the DOM will be queued up. If you want to immediately update the DOM
-> then call `this.update()` after calling `this.forceUpdate()`.
+> 当使用 `forceUpdate()` 时，DOM的更新将会被排队，如果要立即更新DOM，需要在调用`this.forceUpdate()`后调用`this.update()`。
 
 ### `getEl([key, index])`
 
-| params  | type | description |
+| 参数  | 类型 | 描述 |
 | ------- | ---- | ----------- |
-| `key` | `String` | _optional_ the scoped identifier for the element |
-| `index` | `Number` | _optional_ the index of the component, if `key` references a repeated component |
-| return value | `HTMLElement` | the element matching the key or `this.el` if no key is provided |
+| `key` | `String` | _可选的_ 元素范围标识符 |
+| `index` | `Number` | 如果 `key` 引用了一个  _repeated_ 的元素，则该值为 _可选的_ 元素的索引 |
+| 返回值 | `HTMLElement` | 如果没有给定`key`，则匹配该键的元素或`this.el` |
 
-Returns a nested DOM element by prefixing the provided `key` with the component's ID. For Marko, nested DOM elements should be assigned an ID using the `key` custom attribute.
+通过将提供的`key`与组件的ID前缀返回嵌套的DOM元素。 对于Marko，嵌套的DOM元素应该使用`key`自定义属性分配一个ID。
 
 ### `getEls(key)`
 
-| params  | type | description |
+| 参数  | 类型 | 描述 |
 | ------- | ---- | ----------- |
-| `key` | `String` | the scoped identifier for the element |
-| return value | `Array<HTMLElement>` | an array of _repeated_ DOM elements for the given key |
+| `key` | `String` | 元素范围标识符 |
+| 返回值 | `Array<HTMLElement>` | 对于给定`key`的 _repeated_ DOM元素的数组 |
 
-Repeated DOM elements must have a value for the `key` attribute that ends with `[]` (e.g., `key="items[]"`)
+Repeated 的DOM元素必须具有以`[]`结尾的`key`属性的值（例如`key="items[]"`）
 
 ### `getElId([key, index])`
 
-| params  | type | description |
+| 参数  | 类型 | 描述 |
 | ------- | ---- | ----------- |
-| `key` | `String` | _optional_ the scoped identifier for the element |
-| `index` | `Number` | _optional_ the index of the component, if `key` references a repeated component |
-| return value | `String` | the element ID matching the key or `this.el.id` if `key` is undefined |
+| `key` | `String` |  _可选的_ 元素范围标识符 |
+| `index` | `Number` | 如果 `key` 引用了一个  _repeated_ 的元素，则该值为 _可选的_ 元素的索引 |
+| 返回值 | `String` | 如果`key`未定义，则返回与该key匹配的元素的ID或`this.el.id` |
 
-Similar to `getEl`, but only returns the String ID of the nested DOM element instead of the actual DOM element.
+与`getEl`类似，但只返回嵌套DOM元素的字符串ID，而不是实际的DOM元素。
 
 ### `getComponent(key[, index])`
 
-| params  | type | description |
+| 参数  | 类型 | 描述 |
 | ------- | ---- | ----------- |
-| `key` | `String` | the scoped identifier for the element |
-| `index` | `Number` | _optional_ the index of the component, if `key` references a repeated component |
-| return value | `Component` | a reference to a nested `Component` for the given key. If an `index` is provided and the target component is a repeated component (e.g. `key="items[]"`) then the component at the given index will be returned. |
+| `key` | `String` | 元素范围标识符 |
+| `index` | `Number` | 如果 `key` 引用了一个  _repeated_ 的元素，则该值为 _可选的_ 元素的索引 |
+| 返回值 | `Component` | 给定key的嵌套`组件`的引用。 如果给定了`index`，且目标组件是 _repeated_ 的组件（例如`key="items[]"`），则将返回给定索引处的组件。|
 
 ### `getComponents(key, [, index])`
 
-| params  | type | description |
+| 参数  | 类型 | 描述 |
 | ------- | ---- | ----------- |
-| `key` | `String` | the scoped identifier for the element |
-| `index` | `Number` | _optional_ the index of the component, if `key` references a repeated component |
-| return value | `Array<Component>` | an array of _repeated_ `Component` instances for the given key |
+| `key` | `String` | 元素范围标识符 |
+| `index` | `Number` | _可选的_ 组件的索引, 如果 `key` 引用一个 _repeated_ 的组件 |
+| 返回值 | `Array<Component>` | 一个给定key的 _repeated_ `组件` 实例的数组 |
 
-Repeated components must have a value for the `key` attribute that ends with `[]` (e.g., `key="items[]"`)
+Repeated的组件必须具有以`[]`结尾的`key`属性的值（例如`key="items[]"`）
 
 ### `isDestroyed()`
 
-Returns `true` if a component has been destroyed using
-[`component.destroy()`](#codeondestroycode), otherwise `false`.
+如果组件已通过[`component.destroy()`](#codeondestroycode)被销毁，返回`true`，否则返回`false`。
 
 ### `isDirty()`
 
 ### `replaceState(newState)`
 
-| params  | type | description |
+| 参数  | 类型 | 描述 |
 | ------- | ---- | ----------- |
-| `newState` | `Object` | a new state object to replace the previous state |
+| `newState` | `Object` | 一个新的状态对象，用于替代以前的状态 |
 
-Replaces the state with an entirely new state. Equivalent to `this.state = newState`.
+用全新的状态替代旧状态，相当于 `this.state = newState`.
 
-> **Note:** While `setState()` is additive and will not remove properties that are in the old state but not in the new state, `replaceState()` will add the new state and remove the old state properties that are not found in the new state. Thus, if `replaceState()` is used, one must consider possible side effects if the new state contains less or other properties than the replaced state.
+> **Note:** 虽然`setState()`是做加法，但不会删除处于旧状态但不在新状态的属性，`replaceState()`将添加新状态，并删除在新状态下未找到的旧状态属性。 因此，如果使用`replaceState()`，如果新状态包含比待替换状态更少的或者其他的属性，则必须考虑可能产生的副作用。
 
 ### `rerender([input])`
 
-| params  | type | description |
+| 参数  | 类型 | 描述 |
 | ------- | ---- | ----------- |
-| `input` | `Object` | _optional_ new input data to use when re-rendering |
+| `input` | `Object` | 当重新渲染时，_可选的_ 新的输入数据 |
 
-Rerenders the component using its `renderer` and either supplied `input` or internal `input` and `state`.
+使用其`renderer`重新渲染组件，并提供 `input` 或者内部的 `input` 和 `state`。
 
 ### `setState(name, value)`
 
-| params  | type | description |
+| 参数  | 类型 | 描述 |
 | ------- | ---- | ----------- |
-| `name` | `String` | the name of the state property to update |
-| `value` | `Any` | the new value for the state property |
+| `name` | `String` | 要更新的状态属性的名称 |
+| `value` | `Any` | 状态属性的新值 |
 
-Used to change the value of a single state property.  Equivalent to setting `this.state[name] = value` except it will also work for adding new properties to the component state.
+用于更改单个状态属性的值，相当于`this.state[name] = value`，除此之外，也可以用于向组件状态添加新属性。
 
 ```javascript
 this.setState('disabled', true);
@@ -574,11 +580,11 @@ this.setState('disabled', true);
 
 ### `setState(newState)`
 
-| params  | type | description |
+| 参数  | 类型 | 描述 |
 | ------- | ---- | ----------- |
-| `newState` | `Object` | a new state object to merge into the previous state |
+| `newState` | `Object` | 一个新的状态对象，用于合并到之前的状态 |
 
-Used to change the value of multiple state properties.
+用于更改多个状态属性的值。
 
 ```js
 this.setState({
@@ -589,40 +595,40 @@ this.setState({
 
 ### `setStateDirty(name[, value])`
 
-| params  | type | description |
+| 参数  | 类型 | 描述 |
 | ------- | ---- | ----------- |
-| `name` | `String` | the name of the state property to mark as dirty |
-| `value` | `Any` | _optional_ a new value for the state property |
+| `name` | `String` | 需要被标记为脏状态的状态属性的名称 |
+| `value` | `Any` | _可选的_ 状态属性的新值 |
 
-Force a state property to be changed even if the value is equal to the old value. This is helpful in cases where a change occurs to a complex object that would not be detected by a shallow compare. Invoking this function completely circumvents all property equality checks (shallow compares) and always rerenders the component.
+即使给定的值等于旧值，也会强制更改状态属性。这对于在一个复杂的对象发生变化而不会被浅比较检测到的情况是有帮助的。调用此函数可以完全避开所有属性的等式检查（浅比较），并始终重新渲染该组件。
 
-#### More details
+#### 更多细节
 
-The first parameter `name` is used to allow update handlers (e.g. `update_foo(newValue)`) to handle the state transition for the specific state property that was marked as dirty. The second parameter `value` is used as the new value that is given to update handlers. Because `setStateDirty()` always bypasses all property equality checks, this parameter is optional. If not given or equal to the old value, the old value will be used for the update handler.
-It is important to know, that the given parameters do not affect how or if `setStateDirty()` rerenders a component; they are only considered as additional information to update handlers.
+第一个参数`name`用于允许更新处理函数（例如：`update_foo(newValue)`）来处理标记为脏的特定状态属性的状态转换。 第二个参数`value`用作给予更新处理函数的新值。 因为`setStateDirty()`总是绕过所有的属性相等性检查，所以这个参数是可选的。 如果未给出或者等于旧值，旧值将用于更新处理程序。
+重要的是，给定的参数不会影响如何或者是否 `setStateDirty()` 会重新渲染一个组件，它们只会被视为更新处理函数的附加信息。
 
 _example.js_
 
 ```javascript
-// Because this does not create a new array, the change
-// would not be detected by a shallow property comparison
+// 因为这不会创建一个新的数组，
+// 所以这个变化不会被浅属性比较来检测
 this.state.colors.push('red');
 
-// Force that particular state property to be considered dirty so
-// that it will trigger the component's view to be updated
+// 强制指定特定的状态属性是脏的
+// 因此会触发组件的视图的更新
 this.setStateDirty('colors');
 ```
 
 ### `subscribeTo(emitter)`
 
-| params  | description |
+| 参数  | 描述 |
 | ------- | ----------- |
-| `emitter` | a node.js [`EventEmitter`](https://nodejs.org/api/events.html#events_class_eventemitter) or a DOM object that emits events (`window`, `document`, etc.) |
-| return value | a tracked subscription |
+| `emitter` | 一个 node.js [`EventEmitter`](https://nodejs.org/api/events.html#events_class_eventemitter) 或者一个发出事件的DOM对象 (`window`, `document`, 等.) |
+| 返回值 | 跟踪订阅 |
 
-When a component is destroyed, it is necessary to remove any listeners that were attached by the component in order to prevent a memory leak.  By using `subscribeTo`, Marko will automatically track and remove any listeners you attach when the component is destroyed.
+当组件被销毁时，有必要删除组件附加的任何监听器，以防止内存泄漏。 通过使用`subscribeTo`，当组件被销毁时，Marko将自动跟踪和删除附加的任何事件监听器。
 
-Marko uses [`listener-tracker`](https://github.com/patrick-steele-idem/listener-tracker) to provide this feature.
+Marko 使用 [`listener-tracker`](https://github.com/patrick-steele-idem/listener-tracker) 来实现这个特性.
 
 _example.js_
 ```js
@@ -633,49 +639,50 @@ this.subscribeTo(window).on('scroll', () => {
 
 ### `update()`
 
-Immediately, executes any pending updates to the DOM rather than following the normal queued update mechanism for rendering.
+立即执行DOM的任何未完成的更新，而不是遵循正常的排队更新机制进行渲染。
 
 ```js
 this.setState('foo', 'bar');
-this.update(); // Force the DOM to update
+this.update(); // 强制DOM更新
 this.setState('hello', 'world');
-this.update(); // Force the DOM to update
+this.update(); // 强制DOM更新
 ```
 
-## Events
+## 事件
 
-A Marko component inherits from [`EventEmitter`](https://nodejs.org/api/events.html#events_class_eventemitter).  Below are a few commonly used methods, view the node docs for the full list.
+一个 Marko 组件继承自 [`EventEmitter`](https://nodejs.org/api/events.html#events_class_eventemitter)， 以下是一些常用的方法，查看文档以查看完整的方法列表。
 
 ### `emit(eventName, ...args)`
 
-| params  | type | description |
+| 参数  | 类型 | 描述 |
 | ------- | ---- | ----------- |
-| `eventName` | `String` | the name of the event which can be listened for |
-| `...args` | `Any` | all subsequent parameters are passed to the listeners |
+| `eventName` | `String` | 可被监听的的事件的名称 |
+| `...args` | `Any` | 所有需要传递给监听器的后续参数 |
 
-Synchronously calls each of the listeners registered for the event named eventName, in the order they were registered, passing the supplied arguments to each.
+同步地按照注册的顺序调用名称为`eventName`的事件注册的每个监听器，并将给定的参数传递给每个监听器。
+
 
 ### `on(eventName, handler)`
 
-| params  | type | description |
+| 参数  | 类型 | 描述 |
 | ------- | ---- | ----------- |
-| `eventName` | `String` | the name of the event to listen for |
-| `handler` | `Function` | the function to call when the event is fired |
+| `eventName` | `String` | 可被监听的的事件的名称 |
+| `handler` | `Function` | 当事件触发时调用的函数 |
 
-Adds the listener function to the end of the listeners array for the event named eventName. No checks are made to see if the listener has already been added. Multiple calls passing the same combination of eventName and listener will result in the listener being added, and called, multiple times.
+将listener函数添加到名为eventName的事件的listeners数组的末尾，不会检查是否已经添加了监听器。若传递相同组合的eventName和listener，将会导致监听器被添加并被多次调用。
 
 ### `once(eventName, handler)`
 
-| params  | type | description |
+| 参数  | 类型 | 描述 |
 | ------- | ---- | ----------- |
-| `eventName` | `String` | the name of the event to listen for |
-| `handler` | `Function` | the function to call when the event is fired |
+| `eventName` | `String` | 可被监听的的事件的名称 |
+| `handler` | `Function` | 当事件触发时调用的函数 |
 
-Adds a one time listener function for the event named eventName. The next time eventName is triggered, this listener is removed and then invoked.
+为名为eventName的事件添加一次性的监听器函数。第一次触发eventName时，将删除该监听器，然后调用此监听器。
 
-## Lifecycle
+## 生命周期
 
-Marko defines six distinct lifecycle methods.  These methods are called at specific points over the lifecycle of a component.
+Marko定义了六个不同的生命周期钩子，在组件的生命周期中的特定时间点可以调用这些方法。
 
 ```
                                          ⤺
@@ -683,23 +690,24 @@ create → input → render → mount → render   update → destroy
                                          ⤻
 ```
 
-> **ProTip:** When a lifecycle event occurs in the browser, the corresponding event is emitted on the component instance.  A parent component, or other code that has access to the component instance, can listen for these events. For example:
+> **ProTip:** 当在浏览器中出现生命周期事件时，相应的事件将在组件实例上发出，父组件或者可访问组件实例的其他代码可以监听这些事件，例如：
+
 ```js
 component.on('destroy', function() {
-    // The component was destroyed!
+    // 组件已被销毁！
 });
 ```
 
 ### `onCreate(input, out)`
 
-| params  | description |
+| 参数  | 描述 |
 | ------- | ----------- |
-| `input` | the input data used to render the component for the first time |
-| `out`   | the async `out` used to render the component for the first time |
+| `input` | 用于第一次渲染组件的输入数据 |
+| `out`   | 用于第一次渲染组件的异步`out` |
 
-The `create` event is emitted (and `onCreate` is called) when the component is first created.
+当第一次创建组件时，会触发`create`事件（并调用`onCreate`）。
 
-`onCreate` is typically used to set the initial state for stateful components:
+`onCreate`通常用于设置状态组件的初始状态：
 
 _example.marko_
 ```marko
@@ -714,27 +722,27 @@ class {
 
 ### `onInput(input)`
 
-| params  | description |
+| 参数  | 描述 |
 | ------- | ----------- |
-| `input` | the new input data |
+| `input` | 新的输入数据 |
 
-The `input` event is emitted (and `onInput` is called) when the component receives input: both the initial input and for any subsequent updates to its input.
+当该组件接收到输入时，会发出`input`事件（并调用`onInput`）：初始时的输入和其他任何后续更新的输入。
 
 ### `onRender(out)`
 
-| params  | description |
+| 参数  | 描述 |
 | ------- | ----------- |
-| `out`   | the async `out` for the current render |
+| `out`   | 当前渲染的异步`out` |
 
-The `render` event is emitted (and `onRender` is called) when the component is about to be rendered (or re-rendered).
+当组件即将被渲染（或重新渲染）时，`render`事件被触发（并调用`onRender`）。
 
 ### `onMount()`
 
-The `mount` event is emitted (and `onMount` is called) when the component is first mounted to the DOM.  For a server-rendered component, this is the first event that is emitted in the browser.
+当组件首次插入到DOM中时，将发出`mount`事件（并调用`onMount`）。对于服务器渲染的组件，这是在浏览器中发出的第一个事件。
 
-This is the first point at which `this.el` and `this.els` are defined.  `onMount` is commonly used to attach third-party javascript (or `jQuery` if you're still doing that) plugins to the newly-mounted DOM element(s).
+这是`this.el`和`this.els`定义的第一个点。 `onMount`通常用于附加第三方的javascript库（或者如果你仍然使用`jQuery`的话）到新插入的DOM元素中。
 
-For example, attaching a library that monitors whether the component is in the viewport:
+例如，附加一个监听组件是否在视口中的库：
 
 _example.marko_
 ```marko
@@ -753,13 +761,13 @@ class {
 
 ### `onUpdate()`
 
-The `update` event is emitted (and `onUpdate` is called) when the component is called after a component has re-rendered and the DOM has been updated.  If a re-render does not cause the DOM to be updated (nothing changed), this event will not be fired.
+当组件被重新渲染且DOM已被更新后，会触发`update`事件（并调用`onUpdate`）。 如果重新渲染不会导致DOM更新（没有更改），则此事件将不会被触发。
 
 ### `onDestroy()`
 
-The `destroy` event is emitted (and `onDestroy` is called) when the component is about to be unmounted from the DOM and cleaned up.  `onDestroy` should be used to do any additional clean up beyond what Marko handles itself.
+当组件即将从DOM卸载并清理时，会发出`destroy`事件（并调用`onDestroy`）。 应该使用`onDestroy`清理任何超出Marko处理范围的内容。
 
-For example, cleaning up from our scrollmonitor example in [`onMount`](#codeonmountcode):
+举个例子，清理我们在[`onMount`](#codeonmountcode)例子中的 scrollmonitor:
 
 _example.marko_
 ```marko{9-11}
@@ -779,9 +787,9 @@ class {
 // ...
 ```
 
-## DOM Manipulation
+## DOM 操作
 
-The following methods move the component's root DOM node(s) from the current parent element to a new parent element (or out of the DOM in the case of `detach`).
+以下方法将组件的根DOM节点从当前父元素移动到新的父元素（在`detach`的情况下，将其移出DOM）。
 
 ### `appendTo(targetEl)`
 
@@ -791,7 +799,7 @@ this.appendTo(document.body);
 
 ### `detach()`
 
-Detaches the component's root element(s) from the DOM by removing the node from its parent node.
+从其父节点中删除节点，从DOM分离组件的根元素。
 
 ### `insertAfter(targetEl)`
 

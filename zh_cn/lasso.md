@@ -1,18 +1,18 @@
 # Marko + Lasso
 
-The [lasso-marko](https://github.com/lasso-js/lasso-marko) plugin for [Lasso.js](https://github.com/lasso-js/lasso) will automatically compile all imported Marko templates during bundling. In addition, the `lasso-marko` plugin will automatically bundle any template dependencies (including required CSS).
+ [Lasso.js](https://github.com/lasso-js/lasso) 的 [lasso-marko](https://github.com/lasso-js/lasso-marko) 插件在打包时会自动编译所有导入的Marko模板。此外，`lasso-marko`插件也会自动打包任何模板的依赖项（包括依赖的CSS）。
 
-Lasso.js provides Marko custom tags for injecting JavaScript and CSS bundles, images and other resources.
+Lasso.js提供了一些Marko自定义标签，用于注入JavaScript和CSS，图片以及其他资源。
 
-The sample [marko-lasso](https://github.com/marko-js-samples/marko-lasso) app demonstrates how to build a production-ready web application using Marko and Lasso.
-
-## Installation
+ [marko-lasso](https://github.com/marko-js-samples/marko-lasso) 演示了如何使用Marko和Lasso构建一个可靠的Web应用程序。
+ 
+## 安装
 
 ```
 npm install lasso-marko --save
 ```
 
-## Registering the plugin
+## 注册组件
 
 ```js
 require('lasso').configure({
@@ -24,9 +24,9 @@ require('lasso').configure({
 });
 ```
 
-## Lasso custom tags
+## Lasso自定义标签
 
-To inject the required JavaScript and CSS into the page you will want to use the `<lasso-page>`, `<lasso-head>` and `<lasso-body>` tag.
+要将所需的JavaScript和CSS注入到页面中，你需要使用`<lasso-page>`，`<lasso-head>`和`<lasso-body>`标签。
 
 ```html
 <lasso-page package-path="./browser.json" />
@@ -44,7 +44,7 @@ To inject the required JavaScript and CSS into the page you will want to use the
 </html>
 ```
 
-The `browser.json` provides a simple way for declaring _top-level_ page dependencies. For example:
+`browser.json`提供了一种简单的方法来声明 _顶层_ 页面依赖关系。例如：
 
 _browser.json_
 ```json
@@ -56,11 +56,11 @@ _browser.json_
 }
 ```
 
-Lasso.js will automatically bundle up transitive dependencies by building and walking a dependency graph.
+Lasso.js将通过构建和遍历依赖关系图来自动打包依赖。
 
-## Client-side rendering
+## 客户端渲染
 
-Marko templates can be imported and rendered by any JavaScript module. The code below shows how to render a top-level UI component and have it be mounted to the DOM as a child `document.body`:
+Marko模板可以被任何JavaScript模块导入和渲染，下面的代码显示了如何渲染顶级UI组件，并将其作为一个`document.body`的后代挂载到DOM中：
 
 _client.js_
 ```js
@@ -69,12 +69,11 @@ require('./components/app/index.marko')
     .appendTo(document.body);
 ```
 
-When Lasso.js bundles up the code above it will automatically bundle up the required `./components/app/index.marko` file.
+当Lasso.js打包上面的代码时，它将自动打包所需的`./components/app/index.marko` 文件。
 
-## Server-side rendering
+## 服务端渲染
 
-If you are rendering the initial UI on the server then it is necessary to make sure that all UI components are bundled and sent to the browser so that UI components can be mounted in the browser. For example:
-
+如果你在服务器上渲染初始化的UI，则需要确保将所有UI组件打包并发送到浏览器，以便可以在浏览器中挂载UI组件。例如：
 
 _about-me/index.marko_
 ```marko
@@ -99,7 +98,7 @@ _about-me/index.marko_
 </html>
 ```
 
-Typically, adding the top-level UI component as a page dependency is all that is required:
+通常，将顶层的UI组件添加页面的依赖中是必需的：
 
 _about-me/browser.json_
 ```json
@@ -111,9 +110,9 @@ _about-me/browser.json_
 }
 ```
 
-## Browser refresh
+## 浏览器刷新
 
-[browser-refresh](https://github.com/patrick-steele-idem/browser-refresh) is recommended in development for instant page refreshes and hot reloading of Marko templates, styles and other resources. `browser-refresh` works well with Lasso and Marko and is very easy to use as a drop-in replacement for `node`:
+推荐使用[browser-refresh]（https://github.com/patrick-steele-idem/browser-refresh）进行即时页面刷新和热重新加载Marko模板，样式和其他资源。 `browser-refresh`与Lasso和Marko很好的配合使用，可以作为`node`的替代品。
 
 ```bash
 browser-refresh server.js

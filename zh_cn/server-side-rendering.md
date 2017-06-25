@@ -1,6 +1,6 @@
 # 服务端渲染
 
-Marko allows any Marko template/UI component to be rendered on the server or in the browser. A page can be rendered to a `Writable` stream such as an HTTP response stream as shown below:
+Marko允许任何 Marko模板/UI组件在服务器或浏览器渲染。一个页面可以被渲染为一个`可写`流，如HTTP响应流，如下所示:
 
 ```js
 var template = require('./template'); // Import ./template.marko
@@ -11,7 +11,7 @@ module.exports = function(req, res) {
 };
 ```
 
-Marko can also provide you with a `Readable` stream.
+Marko还为你提供了`可读`流。
 
 ```js
 var template = require('./template'); // Import ./template.marko
@@ -22,25 +22,26 @@ module.exports = function(req) {
 };
 ```
 
-> **ProTip:** Marko also provides server-side framework integrations:
+> **ProTip:** Marko还实现了对一些服务端框架的集成：
 > - [express](/docs/express)
 > - [hapi](/docs/hapi)
 > - [koa](/docs/koa)
 > - [huncwot](/docs/huncwot)
 
-## UI Bootstrapping
+## UI 引导
 
-When a page is rendered on the server, additional code is added to the output HTML to allow the UI to instantly boot in the browser. This additional code allows UI components rendered on the server to be mounted in the browser automatically. For each _top-level_ UI component, Marko will serialize the component's data (including `input` and `state` and any properties added to the UI component instance) so that each top-level UI component can be re-rendered and mounted when the page loads in the browser. Only a "partial" re-render is done for each top-level UI component. That is, when doing the partial re-render in the browser, the DOM is not updated and no virtual DOM is actually produced.
+当页面呈现在服务器上时，会在输出的HTML中添加其他代码，以便UI能够在浏览器中立即启动。此附加代码允许在服务器上呈现的UI组件自动插入到浏览器中。对于每个 _顶层_ 的UI组件，Marko将序列化组件的数据（包括`input`和`state`以及添加到UI组件实例中的任何属性），以便每个顶层UI组件可以在浏览器加载页面时被重新渲染和挂载。对于每个顶级UI组件只会进行`部分`的重新渲染。也就是说，当在浏览器中进行部分重新渲染时，DOM不会更新，并且实际上没有生成虚拟DOM。
 
-Marko encodes required information into attributes of rendered HTML elements and it also generates `<script>` tags that will cause UI components to be mounted. The code inside the `<script>` simply registers UI components and when the Marko runtime finally loads, all of the registered UI components will then be mounted. This allows the Marko runtime to be loaded at anytime without causing JavaScript errors.
+Marko将所需的信息编码为渲染出的HTML元素的属性，同时还生成将挂载UI组件的`<script>`标签。 `<script>`中的代码会简单地注册UI组件，当`Marko runtime`最终加载结束时，所有注册的UI组件将会被挂载。这样可以允许随时加载Marko runtime，而不会导致JavaScript错误。
 
-## Bootstrapping Components
+## 引导组件
 
-When a server-rendered page loads in the browser it's possible for marko to automatically detect UI components rendered on the server and create and mount them with the correct `state` and `input` in the browser.
+当服务端渲染的页面在浏览器中加载时，marko可以自动检测在服务器上渲染的UI组件，并在浏览器中使用正确的`state`和`input`创建并挂载它们。
 
-### Bootstrapping: Lasso
+### 引导: Lasso
 
-If you are using [Lasso.js](https://github.com/lasso-js/lasso) then the bootstrapping will happen automatically as long as the JavaScript bundles for your page are included via the `<lasso-body>` tag. A typical HTML page structure will be the following:
+如果你使用[Lasso.js](https://github.com/lasso-js/lasso)，那么引导将会自动发生，只要页面的JavaScript包通过 `<lasso-body>` 标签包含。 典型的HTML页面结构将如下所示：
+
 
 _routes/index/template.marko_
 
@@ -64,48 +65,48 @@ _routes/index/template.marko_
 </html>
 ```
 
-> **ProTip:** We have provided some sample apps to help you get started with Marko + Lasso
+> **ProTip:** 我们提供了一些示例应用程序，以帮助你开始使用Marko + Lasso
 > - [marko-lasso](https://github.com/marko-js-samples/marko-lasso)
 > - [ui-components-playground](https://github.com/marko-js-samples/ui-components-playground)
 
 
-### Bootstrapping: Non-Lasso
+### 引导: Non-Lasso
 
- If a JavaScript module bundler other than Lasso is being used then you will need to add some client-side code to bootstrap your application in the browser by doing the following:
+如果正在使用Lasso以外的JavaScript模块加载器，那么你需要添加一些客户端代码，执行以下操作，以在浏览器中安装你的应用：
 
-1. Load/import/require all of the UI components that were rendered on the server (loading the top-level UI component is typically sufficient)
-2. Call `require('marko/components').init()`
+1. Load/import/require 所有在服务器上渲染的所有UI组件（加载顶层UI组件通常已经足够了）
+2. 调用 `require('marko/components').init()`
 
-For example, if `client.js` is the entry point for your client-side application:
+例如，如果 `client.js` 是客户端应用程序的入口：
 
 _routes/index/client.js_
 ```js
-// Load the top-level UI component:
+// 加载顶层UI组件:
 require('./components/app/index');
 
-// Now that all of the JavaScript modules for the UI component have been
-// loaded and registered we can tell marko to bootstrap/initialize the app
+// 现在，UI组件的所有JavaScript模块已经加载和注册
+// 我们可以告诉marko来引导/初始化应用程序
 
-// Initialize and mount all of the server-rendered UI components:
+// 初始化并挂载所有服务器渲染的UI组件：:
 require('marko/components').init();
 ```
 
-> **ProTip:** We have provided some sample apps to help you get started:
+> **ProTip:** 我们提供了一些示例应用程序来帮助你快速开始一个marko应用：
 > - [marko-webpack](https://github.com/marko-js-samples/marko-webpack)
 > - [marko-browserify](https://github.com/marko-js-samples/marko-browserify)
 > - [marko-rollup](https://github.com/marko-js-samples/marko-rollup)
 
-# Serialization
+# 序列化
 
-For each _top-level_ UI component, Marko will serialize the component's data (including `input` and `state` and any properties added to the UI component instance) down to the browser. You can control which data gets serialized by implementing [`toJSON`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) or by reassigning `this.input` in the UI component's `onInput(input, out)` lifecycle method as shown below:
+对于每个顶层的UI组件，Marko将序列化组件中的数据（包括`input`和`state`以及添加到UI组件实例的任何属性）到浏览器。你可以通过实现[`toJSON`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify)来控制那些数据被序列化，或者通过重新分配 `this.input` ，在UI组件的 `onInput(input, out)` 生命周期方法中，如下所示：
 
 ```javascript
 class {
     onInput() {
-        // Do not serialize any input:
+        // 不要序列化任何输入：
         this.input = null;
 
-        // Serialize a new object instead of the provided input:
+        // 序列化一个新对象，而不是提供输入：
         this.input = {
             foo: 'bar'
         };
@@ -113,21 +114,22 @@ class {
 }
 ```
 
-> NOTE: Marko does allow cycles in serialized objects and Duplicate objects will only be serialized once
+> NOTE: Marko允许序列化对象中的循环，但重复的对象只能被序列化一次
 
-# Caveats
+# 注意事项
 
-There are some caveats associated with rendering a page on the server:
+在服务器渲染一个页面有一些注意事项：
 
-- The UI component data for top-level UI components must be serializable:
-    - Only simple objects, numbers, strings, booleans, arrays and `Date` objects are serializable
-    - Functions are not serializable
-- Care should be taken to avoid having Marko serialize too much data
-- None of the data in `out.global` is serialized by default, but this can be changed as shown below
+- 顶级UI组件的UI组件数据必须可序列化：
+     - 只有简单的对象，数字，字符串，布尔值，数组和`Date`对象是可序列化的
+     - 函数不能被序列化
+- 应注意避免让Marko序列化太多的数据
+- 默认情况下，`out.global`中的数据都不会被序列化，但是可以做如下更改
 
-## Serializing globals
 
-If there are specific properties on the `out.global` object that need to be serialized then they must be whitelisted when the top-level page is rendered on the server. For example, to have the `out.global.apiKey` and the `out.global.locale` properties serialized you would do the following:
+## 序列化全局变量
+
+如果`out.global`对象上有特定的属性需要被序列化，那么当顶层页面在服务器上渲染时，它们必须被列入白名单。例如，要使`out.global.apiKey`和`out.global.locale`属性被序列化，你需要执行以下操作：
 
 ```js
 template.render({

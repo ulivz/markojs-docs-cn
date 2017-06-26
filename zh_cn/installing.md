@@ -2,7 +2,7 @@
 
 ## 体验 Marko
 
-如果你只是想在浏览器中体验 Marko，你可以直接尝试我们的 [在线工具](https://markojs.com/try-online), 你将可以直接在您的浏览器中开发一个Marko应用程序。
+如果你只是想在浏览器中体验 Marko，你可以直接尝试我们的 [在线工具](https://markojs.com/try-online), 你将可以直接在浏览器中开发一个Marko应用程序。
 
 ## 创建新应用
 

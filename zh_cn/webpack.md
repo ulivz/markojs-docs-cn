@@ -1,10 +1,9 @@
 # Marko + Webpack
 
-The [marko-loader](https://github.com/marko-js/marko-loader) loader for [Webpack](https://webpack.github.io/) will automatically compile all imported Marko templates during bundling. In addition, `marko-loader` will automatically bundle any template dependencies (including required CSS).
+针对 [Webpack](https://webpack.github.io/) 的 [marko-loader](https://github.com/marko-js/marko-loader) 会在在打包时会自动编译所有导入的Marko模板。此外，`marko-loader` 也会自动打包任何模板的依赖项（包括依赖的CSS）。
 
-> **ProTip**: Want to see it in action? Check out the [`marko-webpack`](https://github.com/marko-js-samples/marko-webpack) demo repository.
-
-## Installation
+> **ProTip**: 想实际动手来看看? 请查看 [`marko-webpack`](https://github.com/marko-js-samples/marko-webpack)。
+## 安装
 
 ```
 npm install marko --save
@@ -12,14 +11,14 @@ npm install webpack --save
 npm install marko-loader --save
 ```
 
-## Client rendering
+## 客户端循环
 
-Let's say we have a simple view that we want to render in the browser: `hello.marko`
+假设我们有一个简单的视图，我们要在浏览器中渲染：
 
 _hello.marko_
 ```marko
 <h1>Hello ${input.name}</h1>
-```
+``` 
 
 First, let's create a `client.js` that requires the view and renders it to the body:
 
